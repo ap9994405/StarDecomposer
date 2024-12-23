@@ -165,7 +165,7 @@ void BuilderWidget::contextMenu(QPoint point)
     QPoint globalPos = view->mapToGlobal(point);
 
     QMenu myMenu;
-    myMenu.addAction("Compute ZZ polynomial...");
+    myMenu.addAction("Compute polynomial...");
 
     QAction* selectedItem = myMenu.exec(globalPos);
     if (selectedItem)

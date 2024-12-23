@@ -387,7 +387,7 @@ void GraphModelGraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *ev
         QAction *ZZ = new QAction(tr("ZZ"),this);
         if (!m_model->isFinished())
         {
-            ZZ = myMenu.addAction("Compute ZZ polynomial...");
+            ZZ = myMenu.addAction("Compute polynomial...");
         }
 //        QAction *debug =  myMenu.addAction("Select for debuging...");
         QAction *export_as = myMenu.addAction("Export structure as...");

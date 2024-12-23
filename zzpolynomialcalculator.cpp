@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QThread>
 #include <iostream>
+#include <QSysInfo>
 
 #include <fstream>
 
@@ -25,9 +26,16 @@ ZZPolynomialCalculator::ZZPolynomialCalculator(GraphModel* model, QObject *paren
 void ZZPolynomialCalculator::run()
 {
     m_process = new QProcess();
-
-    QString zzcalcname = "StarCalculator";
-
+    QString osType = QSysInfo::productType();
+    QString zzcalcname;
+    if (osType == "windows")
+    {
+        zzcalcname = "StarCalculator.exe";
+    }
+    else
+    {
+        zzcalcname = "StarCalculator";
+    }
 
     m_poly.clear();
     QFileInfo cmdInfo = QFileInfo(QFileInfo(QCoreApplication::arguments().at(0)).absolutePath(),zzcalcname);
@@ -57,34 +65,9 @@ void ZZPolynomialCalculator::run()
             QTextStream inOut(&file);
             inOut << m_model->getZZInput(true, false);  // GraphModel::getZZInput(bool connections, bool hydrogens)
             // getZZInput return xyzfile, if connections is true return xyzfile and neighborlist
-            qDebug() << m_model->getZZInput(true, false);
+            //qDebug() << m_model->getZZInput(true, false);
             std::string ZZInput = m_model->getZZInput(true, false).toStdString();
             std::ofstream InputData;
-            int i=0;
-            while (true)
-            {   
-                i += 1;
-                std::string FileName = std::string("./Output/Output") + std::to_string(i) + std::string(".txt");
-                std::ifstream checkfile(FileName);
-                if (checkfile.good())   //check if file can open
-                {   
-                    checkfile.close();
-                    continue;
-                }
-                else
-                {
-                    InputData.open(FileName);
-                    if (InputData.is_open()) {
-                        InputData << ZZInput << std::endl;  
-                        InputData.close();
-                        // std::cout << "File written successfully." << std::endl;
-                    } 
-                    else {
-                        std::cerr << "Failed to open the file." << std::endl;
-                    }
-                    break;
-                }
-            }
         }
 
         m_process->start(cmd, arguments);
@@ -106,35 +89,6 @@ void ZZPolynomialCalculator::run()
             m_hasError = true;
             m_errorMsg = "The output from " + zzcalcname + " has wrong format1.";
             return;
-        }
-        else
-        {
-            int i=0;
-            while (true)
-            {   
-                i += 1;
-                std::string FileName = std::string("./Output/Output") + std::to_string(i) + std::string(".txt");
-                std::ifstream checkfile(FileName);  // read
-                std::ofstream OutputData;  // write
-                if (checkfile.good())
-                {
-                    checkfile.close();
-                    continue;
-                }
-                else
-                {
-                    i -= 1;
-                    FileName = std::string("./Output/Output") + std::to_string(i) + std::string(".txt");
-                    OutputData.open(FileName, std::ios::app);
-                    if (OutputData.is_open()) 
-                    {
-                        OutputData << "-------------------------------------------" << std::endl;
-                        OutputData << t.toStdString();
-                        OutputData.close();
-                    } 
-                    break;
-                }
-            }
         }
 
         QDomElement zzpoly = resultXML.documentElement();

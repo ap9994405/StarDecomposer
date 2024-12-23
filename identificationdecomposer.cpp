@@ -280,7 +280,7 @@ void IdentificationDecomposer::confirmCombination(QListView *target, QPoint poin
 
     if (target->selectionModel()->selectedIndexes().size() == 1)
     {
-        QAction* ZZPolyAction = myMenu.addAction("Compute ZZ polynomial...");
+        QAction* ZZPolyAction = myMenu.addAction("Compute polynomial...");
         QAction* export_as = myMenu.addAction("Export structure as...");
 
         QAction* selectedItem = myMenu.exec(globalPos);
@@ -301,7 +301,7 @@ void IdentificationDecomposer::confirmCombination(QListView *target, QPoint poin
     {
 
         QAction* combineAction = myMenu.addAction("Combine...");
-        QAction* ZZPolyAction = myMenu.addAction("Compute ZZ polynomial...");
+        QAction* ZZPolyAction = myMenu.addAction("Compute polynomial...");
 
         QAction* selectedItem = myMenu.exec(globalPos);
 
